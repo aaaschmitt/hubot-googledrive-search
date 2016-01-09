@@ -56,3 +56,11 @@ user>> @hubot drive search title= My Cool File contains= This is the coolest fil
 #equivalent to:
 user>> @hubot drive search query= title contains 'My Cool File' and fullText contains 'This is the coolest file ever'
 ```
+
+# Notes
+Since hubot needs to use the redis brain to store the drive tokens and expiration time make sure that the following keys don't conflict with any other keys being used in the brain:
+```
+TOKEN_KEY = 'HUBOT_DRIVE_AUTH_TOKEN'
+REFRESH_KEY = 'HUBOT_DRIVE_REFRESH_TOKEN'
+EXPIRY_KEY = 'HUBOT_DRIVE_EXPIRE_TIME'
+```

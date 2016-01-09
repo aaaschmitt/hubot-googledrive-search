@@ -54,45 +54,44 @@ google.options({
 var search = function(queryString, cb) {
 
     validateToken(function(err, resp) {
+        if (err) {
+            cb({
+                err: err,
+                msg: err.msg
+            });
+            return;
+        }
+
+        drive.files.list({
+            q: queryString
+        }, function(err, resp) {
             if (err) {
                 cb({
                     err: err,
-                    msg: err.msg
+                    msg: 'Drive Api Error: encountered an error while fetching file list'
                 });
                 return;
             }
 
-            drive.files.list({
-                    q: queryString
-                }, function(err, resp) {
-                    if (err) {
-                        cb({
-                            err: err,
-                            msg: 'Drive Api Error: encountered an error while fetching file list'
-                        });
-                        return;
-                    }
+            // Drive api may return either a drive#fileList or a drive#file
+            var kind = resp.kind;
+            var files = null;
+            if (kind == 'drive#file') {
+                files = [resp];
+            } else if (kind == 'drive#fileList') {
+                files = resp.items;
+            }
 
-                    // Drive api may return either a drive#fileList or a drive#file
-                    var kind = resp.kind;
-                    var files = null;
-                    if (kind == 'drive#file') {
-                        files = [resp];
-                    } else if (kind == 'drive#fileList') {
-                        files = resp.items;
-                    }
+            if (!files || !(files.length > 0)) {
+                cb({
+                    err: err,
+                    msg: 'Drive Search Error: failed to get a list of files for given parameters'
+                });
+                return;
+            }
 
-                    if (!files || !(files.length > 0)) {
-                        cb({
-                            err: err,
-                            msg: 'Drive Search Error: failed to get a list of files for given parameters'
-                        });
-                        return;
-                    }
-
-                    cb(null, files);
-                }
-            });
+            cb(null, files);
+        });
     });
 
 }
@@ -104,7 +103,13 @@ var search = function(queryString, cb) {
  * @param  results  the array of filess returned from search
  */
 var formatSearchRes = function(results) {
-    return '/code \n' + results;
+    var res = '';
+    // limit to 5 results
+    for (var i = 0; i < 5 && i < results.length; i++) {
+        res += `Name: ${results[i].title} Link: ${results[i].alternateLink}\n`;
+    }
+
+    return res;
 }
 
 /**
@@ -157,11 +162,10 @@ var setCode = function(code, cb) {
             });
             return;
         }
-        console.log('tokens', token);
         storeToken(token);
         cb(null, {
             resp: token,
-            msg: "drive code successfully set"
+            msg: "Drive code successfully set"
         });
     });
 }
@@ -253,17 +257,18 @@ module.exports = function(robot) {
                 return;
             }
 
-            msg.send(formatSearchRes(msg, resp));
+            msg.send(formatSearchRes(resp));
         });
     });
 
-    robot.respond(/drive search (title=(.+))?\s+(contains=(.)+)?/i, {
+    var searchRe = /drive search (title=((?:.(?!contains=))+))?\s*(contains=(.+))?/i;
+    robot.respond(searchRe, {
         id: 'drive.search-title-contains'
     }, function(msg) {
         var titleStr = msg.match[2],
             containsStr = msg.match[4],
-            titleQuery = `title contains ${titleStr}`,
-            containsQuery = `fullText contains ${containsStr}`,
+            titleQuery = `title contains '${titleStr}'`,
+            containsQuery = `fullText contains '${containsStr}'`,
             queryStr = `${titleQuery} and ${containsQuery}`;
 
         if (!containsStr && !titleStr) {
@@ -281,7 +286,7 @@ module.exports = function(robot) {
                 return;
             }
 
-            msg.send(formatSearchRes(msg, resp));
+            msg.send(formatSearchRes(resp));
         });
     });
 
