@@ -161,7 +161,7 @@ var setCode = function(code, cb) {
         storeToken(token);
         cb(null, {
             resp: token,
-            msg: "code successfully set"
+            msg: "drive code successfully set"
         });
     });
 }
@@ -178,7 +178,7 @@ var validateToken = function(cb) {
 
     if (at == null || rt == null) {
         var authMsg = `Authorize this app by visiting this url :\n ${generateAuthUrl()}` +
-            '\nThen use @hubot drive code <code>';
+            '\nThen use @hubot drive set code <code>';
 
         cb({
             err: null,
@@ -215,10 +215,10 @@ var validateToken = function(cb) {
 var initialBrainLoad = true;
 module.exports = function(robot) {
 
-    robot.respond(/drive\s+code\s+([^\s]+)/i, {
+    robot.respond(/drive(\s+set)?\s+code\s+([^\s]+)/i, {
         id: 'drive.set-code'
     }, function(msg) {
-        var code = msg.match[1];
+        var code = msg.match[2];
         msg.send('Attempting to set code...')
         setCode(code, function(err, resp) {
             if (err) {
