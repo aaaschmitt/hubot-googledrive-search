@@ -25,6 +25,7 @@
   "homepage": "https://github.com/aaaschmitt/hubot-googledrive-search#readme",
   "dependencies": {
     "coffee-script": "^1.10.0",
-    "googleapis": "^2.1.7"
+    "googleapis": "^2.1.7",
+    "hubot-google-auth": "^1.0.3"
   }
 }
