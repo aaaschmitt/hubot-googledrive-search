@@ -1,8 +1,8 @@
 # hubot-googledrive-search
 Search your google drive with hubot!
-This is still a work in progress...
+Authentication handeled by [hubot-google-auth](https://www.npmjs.com/package/hubot-google-auth).
 
-# Installation
+## Installation
 
 * In your project repo run:
 ```
@@ -15,10 +15,10 @@ This is still a work in progress...
     ]
 ```
 
-# Configuration
+## Configuration
 This script requires you to generate oauth2 credentials for the drive account that you want hubot to be able to access. Currently this scipt is configured to give hubot access to all of drive (the specific scope used is: 'https://www.googleapis.com/auth/drive').
 
-1. Generate a client secret.json file by following **step 1** here: https://developers.google.com/drive/v2/web/quickstart/nodejs
+1. Generate a client secret.json file by following **step 1** [here](https://developers.google.com/drive/v2/web/quickstart/nodejs)
 2. Set the environemnt variables that hubot needs (found in your client secret.json file):
     * heroku config:add HUBOT_DRIVE_CLIENT_ID="your_client_id"
     * heroku config:add HUBOT_DRIVE_CLIENT_SECRET="your_client_secret"
@@ -35,7 +35,7 @@ hubot>> Name= This is a Cool File : https://google.drive/1234h123h4123h
         Name= Some Cool File : https://google.drive/qwer1353451asfds
 ```
 
-# Features
+## Features
 This script can be used to search your drive in a variety of ways:
 
 1. Use a google query string to search drive. Find information on query strings here: https://developers.google.com/drive/v2/web/search-parameters
@@ -57,10 +57,10 @@ user>> @hubot drive search title= My Cool File contains= This is the coolest fil
 user>> @hubot drive search query= title contains 'My Cool File' and fullText contains 'This is the coolest file ever'
 ```
 
-# Notes
+## Notes
 Since hubot needs to use the redis brain to store the drive tokens and expiration time make sure that the following keys don't conflict with any other keys being used in the brain:
 ```
-TOKEN_KEY = 'HUBOT_DRIVE_AUTH_TOKEN'
-REFRESH_KEY = 'HUBOT_DRIVE_REFRESH_TOKEN'
-EXPIRY_KEY = 'HUBOT_DRIVE_EXPIRE_TIME'
+'HUBOT_DRIVE_GOOGLE_AUTH_TOKEN'
+'HUBOT_DRIVE_GOOGLE_AUTH_REFRESH_TOKEN'
+'HUBOT_DRIVE_GOOGLE_AUTH_EXPIRE_TIME'
 ```

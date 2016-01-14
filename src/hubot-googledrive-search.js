@@ -3,7 +3,6 @@
 //
 // Dependencies:
 //   google-api-nodejs-client --> npm googleapis
-//   requires a hubot brain
 //
 // Commands:
 //   hubot drive set code <code>  
@@ -104,15 +103,14 @@ var search = function(queryString, cb) {
 
 /**
  * Formats the search results obtained from search
- * TODO: Acutally write this....
  *
- * @param  results  the array of filess returned from search
+ * @param  results  the array of files returned from search
  */
 var formatSearchRes = function(results) {
     var res = '';
     // limit to 5 results
     for (var i = 0; i < 5 && i < results.length; i++) {
-        res += `#{i+1}.) ${results[i].title} \n${results[i].alternateLink}\n\n`;
+        res += `${i+1}.) ${results[i].title} \n${results[i].alternateLink}\n`;
     }
 
     return res;
@@ -122,7 +120,7 @@ var formatSearchRes = function(results) {
 var initialBrainLoad = true;
 module.exports = function(robot) {
 
-    auth = new HubotGoogleAuth(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL, SCOPES, robot.brain);
+    auth = new HubotGoogleAuth('HUBOT_DRIVE', CLIENT_ID, CLIENT_SECRET, REDIRECT_URL, SCOPES, robot.brain);
 
     robot.respond(/drive(\s+set)?\s+code\s+([^\s]+)/i, {
         id: 'drive.set-code'
