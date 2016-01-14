@@ -133,7 +133,7 @@ module.exports = function(robot) {
                 return;
             }
 
-            msg.send(resp.msg);
+            msg.send("Hubot google drive code set");
         });
     });
 

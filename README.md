@@ -19,20 +19,22 @@ Authentication handeled by [hubot-google-auth](https://www.npmjs.com/package/hub
 This script requires you to generate oauth2 credentials for the drive account that you want hubot to be able to access. Currently this scipt is configured to give hubot access to all of drive (the specific scope used is: 'https://www.googleapis.com/auth/drive').
 
 1. Generate a client secret.json file by following **step 1** [here](https://developers.google.com/drive/v2/web/quickstart/nodejs)
-2. Set the environemnt variables that hubot needs (found in your client secret.json file):
-    * heroku config:add HUBOT_DRIVE_CLIENT_ID="your_client_id"
-    * heroku config:add HUBOT_DRIVE_CLIENT_SECRET="your_client_secret"
-    * heroku config:add HUBOT_DRIVE_REDIRECT_URL="the_first_uri_in_the_list"
-3. Load the script and attempt to interact with hubot. You will have to authorize the app to get your inital token and refresh token. The script will then store the refresh token in the hubot brain for future use, so this process should onlye need to be done once. Here's a sample interaction:
+2. Set these required environemnt variables (found in your client secret.json file):
+    * HUBOT_DRIVE_CLIENT_ID**="your_client_id"
+    * HUBOT_DRIVE_CLIENT_SECRET**="your_client_secret"
+    * HUBOT_DRIVE_REDIRECT_URL**="the_first_uri_in_the_list"
+3. Load the script and attempt to interact with hubot. You will have to authorize the app to get your inital token and refresh token. The script will then store the refresh token in the hubot brain for future use, so this process should only need to be done once. Here's a sample initial interaction:
 ```
 user>> @hubot drive search title= My Cool File
 hubot>> Authorize this app by visiting: https://google.com/some_thing_with_your_client_info
         Then use @hubot drive set code <code>
 user>> @hubot drive set code 123412351235
-hubot>> drive code successfully set
+hubot>> Hubot drive code successfully set!
 user>> @hubot search title= Cool File
-hubot>> Name= This is a Cool File : https://google.drive/1234h123h4123h
-        Name= Some Cool File : https://google.drive/qwer1353451asfds
+hubot>> 1.) This is a Cool File
+		https://google.drive/1234h123h4123h
+        2.) Some Cool File
+        https://google.drive/qwer1353451asfds
 ```
 
 ## Features
