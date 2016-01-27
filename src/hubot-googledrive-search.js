@@ -43,14 +43,13 @@ var auth;
  */
 var search = function(queryString, cb) {
 
-    var tokens = auth.getTokens();
+    var tokens = auth.getTokens(),
+        authUrl = auth.generateAuthUrl(),
+        authMsg = `Authorize this app by visiting this url :\n ${authUrl}` +
+        '\nThen use @hubot drive set code <code>';
 
     // If there are no existing refresh tokens then the user will need to manually authenticate
     if (!tokens.refresh_token) {
-        var authUrl = auth.generateAuthUrl(),
-            authMsg = `Authorize this app by visiting this url :\n ${authUrl}` +
-                    '\nThen use @hubot drive set code <code>';
-
         cb({
             err: null,
             msg: authMsg
@@ -133,7 +132,7 @@ module.exports = function(robot) {
                 return;
             }
 
-            msg.send("Hubot google drive code set");
+            msg.send("Hubot drive code successfully set!");
         });
     });
 
@@ -142,7 +141,7 @@ module.exports = function(robot) {
     }, function(msg) {
         var tokens = auth.getTokens();
         for (var name in tokens) {
-            msg.send(`#{name}: ${tokens[name]}`);
+            msg.send(`${name}: ${tokens[name]}`);
         }
     });
 
