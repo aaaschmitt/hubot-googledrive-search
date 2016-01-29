@@ -1,6 +1,6 @@
 {
   "name": "hubot-googledrive-search",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Google drive search for hubot!",
   "main": "index.coffee",
   "scripts": {
