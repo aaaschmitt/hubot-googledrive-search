@@ -58,7 +58,9 @@ var search = function(queryString, cb) {
     }
 
     auth.validateToken(function(err, resp) {
+
         if (err) {
+            console.log(err);
             cb({
                 err: err,
                 msg: authMsg
