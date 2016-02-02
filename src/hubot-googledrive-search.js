@@ -118,10 +118,12 @@ var formatSearchRes = function(results) {
 }
 
 // Export robot functions
-var initialBrainLoad = true;
 module.exports = function(robot) {
 
-    auth = new HubotGoogleAuth('HUBOT_DRIVE', CLIENT_ID, CLIENT_SECRET, REDIRECT_URL, SCOPES, robot.brain);
+    // wait for brain to load otherwise brain values will be null
+    robot.brain.on('loaded', function() {
+       auth = new HubotGoogleAuth('HUBOT_DRIVE', CLIENT_ID, CLIENT_SECRET, REDIRECT_URL, SCOPES, robot.brain); 
+    });
 
     robot.respond(/drive(\s+set)?\s+code\s+([^\s]+)/i, {
         id: 'drive.set-code'
