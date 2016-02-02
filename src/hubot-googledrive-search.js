@@ -57,7 +57,7 @@ var search = function(queryString, cb) {
         return;
     }
 
-    auth.validateToken(robot.brain, function(err, resp) {
+    auth.validateToken(function(err, resp) {
         if (err) {
             cb({
                 err: err,
